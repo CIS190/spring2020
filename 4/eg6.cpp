@@ -36,6 +36,8 @@ public:
     }
     integer & operator=(integer && i)
     {
+        // not really more efficient for this class
+        delete p;
         p = i.p;
         i.p = nullptr;
         cout << "move=\n";

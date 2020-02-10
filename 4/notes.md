@@ -77,3 +77,14 @@
 - Note that you need to call the base class copy/move constructor/`operator=` yourself if you are writing a custom copy/move constructor/`operator=` (and you want the base class's behavior). The implicit (`= default`) ones will do it for you.
   - All constructors (copy/move included) will call the base class default constructor if you don't call any base class constructor in the initializer list.
   - Destructors will also call the base class destructor (as noted above)
+
+## Misc extra stuff
+
+- Default arguments.
+  - It is possible to declare the default in either the declaration or the definition of the member function (not both). You should do this in the declaration (header), otherwise a caller can't know it exists.
+
+- `enum` and `enum class`es
+  - `enum` just declare some names for ints 0, 1, 2, 3, etc
+  - `enum class` is strongly typed and scoped enumerators
+    - can actually define more operators, but won't go into this.
+    - prefer enum class to enum, in most cases
