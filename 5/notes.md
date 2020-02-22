@@ -1,4 +1,4 @@
-# Lecture 5: Sept 26 2019
+# Lecture 5: Feb 17 2020
 
 ## Exceptions
 - In C...
