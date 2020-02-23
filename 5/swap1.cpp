@@ -10,40 +10,40 @@ private:
 public:
     integer(int i) : p {new int {i}}
     {
-        cout << "ctor\n";
+        std::cerr << "ctor\n";
     }
 
     integer(const integer & i) : p {new int {i.get()}}
     {
-        cout << "copy ctor\n";
+        std::cerr << "copy ctor\n";
     }
     integer(integer && i) : p {i.p}
     {
         i.p = nullptr;
-        cout << "move ctor\n";
+        std::cerr << "move ctor\n";
     }
     ~integer()
     {
         delete p;
-        cout << "dtor\n";
+        std::cerr << "dtor\n";
     }
 
     integer & operator=(const integer & i)
     {
         integer temp {i}; // copy
 
-        swap(p, temp.p);
+        std::swap(p, temp.p);
 
-        cout << "copy=\n";
+        std::cerr << "copy=\n";
         return *this;
     }
     integer & operator=(integer && i)
     {
         integer temp {move(i)}; // move
 
-        swap(p, temp.p);
+        std::swap(p, temp.p);
 
-        cout << "move=\n";
+        std::cerr << "move=\n";
         return *this;
     }
 
@@ -70,5 +70,5 @@ int main()
 
     j = incr(i);
 
-    cout << j.get() << "\n";
+    std::cerr << j.get() << "\n";
 }

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <utility>
 
-using namespace std;
-
 class integer
 {
 private:
@@ -10,36 +8,36 @@ private:
 public:
     integer(int i) : p {new int {i}}
     {
-        cout << "ctor\n";
+        std::cerr << "ctor\n";
     }
 
     integer(const integer & i) : p {new int {i.get()}}
     {
-        cout << "copy ctor\n";
+        std::cerr << "copy ctor\n";
     }
     integer(integer && i) : p {i.p}
     {
         i.p = nullptr;
-        cout << "move ctor\n";
+        std::cerr << "move ctor\n";
     }
     ~integer()
     {
         delete p;
-        cout << "dtor\n";
+        std::cerr << "dtor\n";
     }
 
     integer & operator=(integer i)
     {
-        using std::swap; // not needed since we already did using namespace std; above. If we didn't, we would need this for the fallback to std::swap to work.
-        swap(*this, i); // since the arguments are in the integer namespace, this swap chooses integer::swap
+        // we are not writing using std::swap here because we do _not_ want std::swap, which would result in an infinite loop.
+        swap(*this, i); // since the arguments are in the integer namespace, this swap chooses the friend swap associated with integer
 
-        cout << "=\n";
+        std::cerr << "=\n";
         return *this;
     }
 
     friend void swap(integer & i, integer & j) noexcept
     {
-        using std::swap;
+        using std::swap; // makes std::swap accessible as just swap. If i.p was of some unknown type where we don't know if there is a custom swap available for it, this will allow C++ to fall back to std::swap if there is no custom swap available.
         swap(i.p, j.p);
     }
 
@@ -66,5 +64,5 @@ int main()
 
     j = incr(i);
 
-    cout << j.get() << "\n";
+    std::cerr << j.get() << "\n";
 }
