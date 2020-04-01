@@ -30,7 +30,7 @@ Talk about what features of C++ you expect to use, and how you plan to structure
 Provide an estimate for the time you expect to spend on different parts of the project, and how you expect the work will be split within your group.
 
 Each group should have one member submit the proposal on Piazza as a private post.
-I will then make a shared Github repo for your group.
+Then, make a shared Github repo on [Github Classroom using this link](https://classroom.github.com/g/xshDbxfA).
 
 Grading will be based solely on completeness of these requirements.
 I will provide feedback about your proposal as soon as possible.
