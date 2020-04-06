@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-    vector<int> v(1e4);
+    vector<int> v(1e2);
     iota(v.begin(), v.end(), 0);
 
     auto f = [](auto & i)
@@ -17,9 +17,11 @@ int main()
 
     for_each(v.begin(), v.end(), f);
 
+    cin.get();
     cerr << "\n";
     for_each(execution::par, v.begin(), v.end(), f);
 
+    cin.get();
     cerr << "\n";
     for_each(execution::par_unseq, v.begin(), v.end(), f);
 
