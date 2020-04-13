@@ -83,7 +83,7 @@
 [`packaged_task.cpp`](packaged_task.cpp)
 
 - `packaged_task` basically wraps a task with the capability to return a `future`, allowing us to easily use the return value of, or any exceptions throw from a task.
-- Since a `package_task` owns resources (the task and `promise`), it cannot be copied and must be `move`d.
+- Since a `package_task` owns resources (the task and the internal state required for the `future`), it cannot be copied and must be `move`d.
 - Using `packaged_task`s and `thread`s is similar to, but more flexible than `async`, since we can control how the task is run (whereas `async` decides for us if it should run in a separate thread, and starts the task immediately if it does).
   - Basically `async` wraps and uses `packaged_task` with a simpler interface.
 
@@ -129,26 +129,3 @@
   - Only one `thread` can lock the `shared_mutex` at the exclusive level at a time, and only if the shared lock is not acquired by anyone.
 - There are also RAII-style wrappers for shared and exclusive locking, called `shared_lock` and `unique_lock` respectively.
 - In this example, multiple reader threads are in the critical section at the same time, which you can see by the interleaved prints.
-
-### Waiting
-
-[`condition_variable.cpp`](condition_variable.cpp)
-
-- `mutex` allows us to block until an exclusive resource (the `mutex`) is available. But what if we want to wait for something more complex?
-  - We could just use a loop to continually check the condition: `while (condition = false) {} // afterwards condition must be true!`
-  - This is both inefficient (wasting CPU time) and doesn't work (the condition may change back to false if we don't guard the condition with a `mutex`, and we never release the `mutex` if we do guard the condition).
-- `condition_variable`s are a synchronization primitive used for threads to sleep until another thread wakes it up, based on some _condition_.
-- `condition_variable` must be used with a `mutex`.
-  - The waiting `thread` acquires the `mutex` using a `unique_lock`, then calls `.wait()` on the `condition_variable`. `.wait()` will release the lock and suspend the `thread` until it is woken up.
-  - To wake up threads waiting on `condition_variable`s, a `thread` that changes the condition can call `.notify_one()` or `.notify_all()` to wake up one or all waiting `thread`s on that `condition_variable`.
-  - When a thread wakes up, it must acquire the lock again to leave the `.wait()`.
-- `condition_variable` uses `unique_lock` instead of `scoped_lock` because we need finer control of the lock. `scoped_lock` just locks on construction and unlocks on destruction. `unique_lock` provides methods to lock and unlock at any time.
-- `.wait()` can take a second argument, a predicate that represents the condition to check.
-  - This is to combat _spurious wakeup_, where suspended threads can just wake up randomly, for no reason.
-  - Typically the `wait` is wrapped in a while loop: `while (!condition) cv.wait(...);`.
-  - This overload of `.wait()` does this for you, the predicate is checked and if it is not true, we wait again.
-    - Note that since `.wait()` needs to acquire the lock, the predicate is guarded by the lock as well.
-
-### C++20
-
-- C++20 will add some other common synchronization primitives: semaphores and barriers.
